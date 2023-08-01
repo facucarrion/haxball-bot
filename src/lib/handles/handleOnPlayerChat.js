@@ -1,5 +1,6 @@
+import { sendCustomAnnouncement } from '../chat'
 import { executeCommand, isCommand } from '../commands'
-import { TEAMS } from '../constants'
+import { FONT_WEIGHT, TEAMS } from '../constants'
 
 export function handleOnPLayerChat ({
   player,
@@ -9,13 +10,23 @@ export function handleOnPLayerChat ({
     room
   }
 }) {
-  if (isCommand(message).isCommand) {
-    if (isCommand.error) {
-      room.sendAnnouncement(`Error: ${isCommand.error}`, player.id, 0xFF0000)
+  const isCommandResult = isCommand(message, player.admin)
+
+  if (isCommandResult.isCommand) {
+    if (isCommandResult.error) {
+      console.log(isCommandResult.error)
+      sendCustomAnnouncement({
+        msg: isCommandResult.error,
+        variant: 'ERROR',
+        target: player.id,
+        room
+      })
+
+      return false
     }
 
-    const result = executeCommand({
-      command: isCommand(message).command,
+    const executeCommandResult = executeCommand({
+      command: isCommandResult.command,
       player,
       body: message.split(' ').slice(1).join(' '),
       extras: {
@@ -24,10 +35,18 @@ export function handleOnPLayerChat ({
       }
     })
 
-    if (result.error) room.sendAnnouncement(`Error: ${result.error}`, player.id, 0xFF0000)
+    if (executeCommandResult.error) {
+      sendCustomAnnouncement({
+        msg: executeCommandResult.error,
+        variant: 'ERROR',
+        target: player.id,
+        room
+      })
+    }
   } else {
     const teamData = Object.values(TEAMS).find(team => team.value === player.team)
-    room.sendAnnouncement(`[${teamData.symbol}] ${player.name}: ${message}`, null, teamData.color)
+    room.sendAnnouncement(`[${teamData.symbol}] ${player.name}: ${message}`, FONT_WEIGHT.ITALIC, teamData.color, 1)
   }
+
   return false
 }

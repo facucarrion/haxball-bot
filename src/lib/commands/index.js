@@ -1,5 +1,6 @@
 import { ROLES } from '../constants'
 import { COMMAND_ERRORS } from '../errors'
+import { instantRestart } from './game'
 import { autokick, claimAdmCommand } from './players'
 
 const COMMANDS = [
@@ -16,12 +17,19 @@ const COMMANDS = [
     roles: [ROLES.PLAYER],
     desc: 'Autokick',
     function: autokick
+  },
+  {
+    name: 'restart',
+    aliases: ['rr'],
+    roles: [ROLES.ADMIN],
+    desc: 'Reinicia la sala.',
+    function: instantRestart
   }
 ]
 
 export const findCommand = command => COMMANDS.find(item => item.name === command || item.aliases.includes(command))
 
-export const isCommand = msg => {
+export const isCommand = (msg, isAdmin) => {
   const response = {
     isCommand: false,
     command: null,
@@ -37,7 +45,12 @@ export const isCommand = msg => {
   const selectedCommand = findCommand(response.command)
 
   if (!selectedCommand) response.error = COMMAND_ERRORS.NOT_FOUND
-  if (selectedCommand.roles.includes(ROLES.PLAYER)) response.error = COMMAND_ERRORS.NOT_ALLOWED
+
+  console.log(selectedCommand)
+  console.log(selectedCommand.roles.includes(ROLES.ADMIN))
+  console.log(!isAdmin)
+
+  if (selectedCommand.roles.includes(ROLES.ADMIN) && !isAdmin) response.error = COMMAND_ERRORS.NOT_ALLOWED
 
   return response
 }

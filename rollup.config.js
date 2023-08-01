@@ -28,9 +28,6 @@ export default {
   ],
   output: {
     file: 'dist/main.js',
-    format: 'iife',
-    globals: {
-      mysql: 'mysql2'
-    }
+    format: 'iife'
   }
 }

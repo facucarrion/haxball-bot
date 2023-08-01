@@ -1,29 +1,18 @@
 // ROOM DATA
 
 import { sendCustomAnnouncement } from './lib/chat'
-import { FONT_WEIGHT } from './lib/constants'
+import { adminPassword, initialConfig, roomConfig } from './lib/config'
 import { handleOnPLayerChat } from './lib/handles/handleOnPlayerChat'
-
-const roomConfig = {
-  roomName: 'Vénganse a la Verga',
-  playerName: '🥂 Facu Bot',
-  public: false,
-  maxPlayers: 12,
-  token: 'thr1.AAAAAGTHv-3imYQgKYEC8g.rguSqoIz84Y',
-  noPlayer: true
-}
-
-const adminPassword = Math.floor(Math.random() * 10000).toString()
 
 console.log(`Admin password: ${adminPassword}`)
 
 // eslint-disable-next-line no-undef
 const room = HBInit(roomConfig)
 
-room.setScoreLimit(5)
-room.setTimeLimit(10)
-room.setTeamsLock(true)
-room.setKickRateLimit(6, 0, 0)
+initialConfig(room, {
+  scoreLimit: 5,
+  timeLimit: 10
+})
 
 /* ///////////////// */
 /* /  E V E N T S  / */
@@ -33,7 +22,7 @@ room.setKickRateLimit(6, 0, 0)
 
 room.onPlayerJoin = function (player) {
   sendCustomAnnouncement({
-    msg: player.name,
+    msg: `Bienvenido ${player.name}!`,
     target: player.id,
     variant: 'WELCOME',
     room
@@ -49,7 +38,11 @@ room.onPlayerLeave = function (player) {
 
 room.onPlayerKicked = function (kickedPlayer, reason, ban, byPlayer) {
   if (!byPlayer) return false
-  room.sendAnnouncement(`El jugador ${kickedPlayer.name} ha sido expulsado por ${byPlayer.name}.`, null, FONT_WEIGHT.BOLD, 0xFF0000)
+  sendCustomAnnouncement({
+    msg: `El jugador ${kickedPlayer.name} ha sido ${ban ? 'BANEADO' : 'KICKEADO'} por ${byPlayer.name}.`,
+    variant: 'DANGER',
+    room
+  })
 }
 
 // PLAYER ACTIVITY
