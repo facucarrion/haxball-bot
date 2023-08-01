@@ -21,27 +21,25 @@ export function handleOnPLayerChat ({
         target: player.id,
         room
       })
-
-      return false
-    }
-
-    const executeCommandResult = executeCommand({
-      command: isCommandResult.command,
-      player,
-      body: message.split(' ').slice(1).join(' '),
-      extras: {
-        room,
-        adminPassword
-      }
-    })
-
-    if (executeCommandResult.error) {
-      sendCustomAnnouncement({
-        msg: executeCommandResult.error,
-        variant: 'ERROR',
-        target: player.id,
-        room
+    } else {
+      const executeCommandResult = executeCommand({
+        command: isCommandResult.command,
+        player,
+        body: message.split(' ').slice(1).join(' '),
+        extras: {
+          room,
+          adminPassword
+        }
       })
+
+      if (executeCommandResult.error) {
+        sendCustomAnnouncement({
+          msg: executeCommandResult.error,
+          variant: 'ERROR',
+          target: player.id,
+          room
+        })
+      }
     }
   } else {
     const teamData = Object.values(TEAMS).find(team => team.value === player.team)
