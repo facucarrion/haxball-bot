@@ -5,15 +5,15 @@ export const roomConfig = {
   public: false,
   password: '123',
   maxPlayers: 12,
-  token: 'thr1.AAAAAGTJzNnXc9EmYm9PwA.4Sm5L3SNknw',
+  token: 'thr1.AAAAAGTKZiedhzSH2SqfjA.tH3551Q3snw',
   noPlayer: true
 }
 
 export const adminPassword = Math.floor(Math.random() * 10000).toString()
 
-export function initialConfig (room, { scoreLimit, timeLimit }) {
-  room.setScoreLimit(5)
-  room.setTimeLimit(10)
+export function initialConfig (room, { score = 5, time = 10 }) {
+  room.setScoreLimit(score)
+  room.setTimeLimit(time)
   room.setTeamsLock(true)
   room.setKickRateLimit(6, 0, 0)
 }

@@ -1,7 +1,9 @@
 // ROOM DATA
 
 import { sendCustomAnnouncement } from './lib/chat'
+import { instantRestart } from './lib/commands/game'
 import { adminPassword, initialConfig, roomConfig } from './lib/config'
+import { endGame } from './lib/game'
 import { handleOnPLayerChat } from './lib/handles/handleOnPlayerChat'
 
 console.log(`Admin password: ${adminPassword}`)
@@ -9,10 +11,21 @@ console.log(`Admin password: ${adminPassword}`)
 // eslint-disable-next-line no-undef
 const room = HBInit(roomConfig)
 
-initialConfig(room, {
-  scoreLimit: 5,
-  timeLimit: 10
-})
+const limits = {
+  score: 1,
+  time: 10
+}
+
+initialConfig(room, limits)
+
+/* ///////////////// */
+/* /  H E L P E R  / */
+/* ///////////////// */
+
+const scores = {
+  1: 0,
+  2: 0
+}
 
 /* ///////////////// */
 /* /  E V E N T S  / */
@@ -79,6 +92,17 @@ room.onGameUnpause = function (byPlayer) {
 }
 
 room.onTeamGoal = function (team) {
+  scores[team] += 1
+
+  console.log(scores)
+  console.log(team)
+
+  if (scores[team] === limits.score) {
+    endGame(team, room)
+    setTimeout(() => {
+      instantRestart({ extras: { room } })
+    }, 50)
+  }
 }
 
 room.onPositionsReset = function () {

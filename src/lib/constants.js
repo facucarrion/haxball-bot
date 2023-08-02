@@ -30,7 +30,7 @@ export const COLORS = {
   BLUE: 0x57D8FF,
   GRAY: 0xADADAD,
   GREEN: 0x8BFF26,
-  YELLOW: 0xFFE134
+  YELLOW: 0xFFCF4D
 }
 
 export const TEAMS = {
@@ -54,4 +54,10 @@ export const TEAMS = {
     symbol: '👑',
     color: COLORS.YELLOW
   }
+}
+
+export const TEAMS_VALUES = {
+  0: 'SPECTATOR',
+  1: 'RED',
+  2: 'BLUE'
 }
