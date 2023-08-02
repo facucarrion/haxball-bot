@@ -5,7 +5,7 @@ export const roomConfig = {
   public: false,
   password: '123',
   maxPlayers: 12,
-  token: 'thr1.AAAAAGTHv-3imYQgKYEC8g.rguSqoIz84Y',
+  token: 'thr1.AAAAAGTJzNnXc9EmYm9PwA.4Sm5L3SNknw',
   noPlayer: true
 }
 

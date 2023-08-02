@@ -38,19 +38,21 @@ export const isCommand = (msg, isAdmin) => {
 
   if (msg[0] !== '!') return response
 
-  response.isCommand = true
-
   response.command = msg.split(' ')[0].substring(1)
 
   const selectedCommand = findCommand(response.command)
 
-  if (!selectedCommand) response.error = COMMAND_ERRORS.NOT_FOUND
+  if (!selectedCommand) {
+    response.error = COMMAND_ERRORS.NOT_FOUND
+    return response
+  }
 
-  console.log(selectedCommand)
-  console.log(selectedCommand.roles.includes(ROLES.ADMIN))
-  console.log(!isAdmin)
+  if (selectedCommand.roles.includes(ROLES.ADMIN) && !isAdmin) {
+    response.error = COMMAND_ERRORS.NOT_ALLOWED
+    return response
+  }
 
-  if (selectedCommand.roles.includes(ROLES.ADMIN) && !isAdmin) response.error = COMMAND_ERRORS.NOT_ALLOWED
+  response.isCommand = true
 
   return response
 }

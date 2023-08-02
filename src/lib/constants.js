@@ -29,7 +29,8 @@ export const COLORS = {
   RED: 0xFF3333,
   BLUE: 0x57D8FF,
   GRAY: 0xADADAD,
-  GREEN: 0x8BFF26
+  GREEN: 0x8BFF26,
+  YELLOW: 0xFFE134
 }
 
 export const TEAMS = {
@@ -47,5 +48,10 @@ export const TEAMS = {
     value: 2,
     symbol: '🔵',
     color: COLORS.BLUE
+  },
+  ADMIN: {
+    value: 3,
+    symbol: '👑',
+    color: COLORS.YELLOW
   }
 }

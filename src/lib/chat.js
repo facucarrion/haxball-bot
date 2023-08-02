@@ -42,3 +42,19 @@ export function sendCustomAnnouncement ({
 
   room.sendAnnouncement(msgBuilder(msg), target, color, style, sound)
 }
+
+export function sendCustomChat ({
+  message,
+  player,
+  teamData,
+  extras: {
+    room
+  }
+}) {
+  const {
+    symbol,
+    color
+  } = teamData
+
+  room.sendAnnouncement(`${symbol} | ${player.name}: ${message}`, null, color, FONT_WEIGHT.BOLD, 1)
+}
